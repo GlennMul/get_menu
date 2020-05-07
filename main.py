@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request
 from get_menu import get_menu
 import pandas as pd
+from rq import Queue
+from worker import conn
 
+q = Queue(connection=conn)
+result = q.enqueue(get_menu, 'http://heroku.com')
 
 app = Flask(__name__)
 
