@@ -16,7 +16,7 @@ def get_menu(url):
             'Accept-Language': 'en-US,en;q=0.8',
             'Connection': 'keep-alive'}
 
-        r = requests.get(url, headers=hdr, timeout=15)
+        r = requests.get(url, headers=hdr, timeout=30)
         doc = BeautifulSoup(r.text, "html.parser")
 
         cat_list = []
@@ -49,7 +49,7 @@ def get_menu(url):
                 except:
                     price_list.append(np.NaN)
                 try:
-                    picr = requests.get(splash, headers=hdr, timeout=15)
+                    picr = requests.get(splash, headers=hdr, timeout=30)
                     pic = BeautifulSoup(picr.text, "html.parser")
                     pic_list.append(pic.select('.af.d2 img')[0].attrs['src'])
                 except:
