@@ -4,8 +4,7 @@ import pandas as pd
 from rq import Queue
 from worker import conn
 
-q = Queue(connection=conn)
-result = q.enqueue(get_menu, 'http://heroku.com')
+
 
 app = Flask(__name__)
 
@@ -26,5 +25,8 @@ def test():
         df = get_menu(url)
     else:
         df = pd.DataFrame([])
+    
+    q = Queue(connection=conn)
+    result = q.enqueue(get_menu, url)
 
     return render_template("index.html", url=url, tables=[df.to_html(classes='u-full-width', index=False)])
