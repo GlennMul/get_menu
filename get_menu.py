@@ -1,11 +1,13 @@
-import requests
-from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
+import requests
+import timeit
+from bs4 import BeautifulSoup
 
 
 # noinspection PyBroadException
 def get_menu(url):
+    start_time = timeit.default_timer()
     try:
         main_url = 'https://www.ubereats.com'
         hdr = {
@@ -62,7 +64,9 @@ def get_menu(url):
                 'Pic_URL': pic_list}
         df = pd.DataFrame(data)
 
+        print(timeit.default_timer() - start_time)
         return df
     except:
         df = pd.DataFrame({"Invalid URL":[]})
+        print(timeit.default_timer() - start_time)
         return df
