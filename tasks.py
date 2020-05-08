@@ -5,7 +5,7 @@ app = celery.Celery('example')
 
 @app.task
 def add(x, y):
-    return x + y
+    return (x + y) * x
 
 
 import os
