@@ -25,7 +25,7 @@ def get_menu(url):
         dish_list = []
         desc_list = []
         price_list = []
-        pic_list = []
+#        pic_list = []
 
         category = doc.select('li')
 
@@ -41,7 +41,7 @@ def get_menu(url):
             for i in card:
                 cat_list.append(cat_name)
                 dish_list.append(i.select('h4')[0].text.strip())
-                splash = main_url + i.select('a')[0].attrs['href'].strip()
+#                splash = main_url + i.select('a')[0].attrs['href'].strip()
                 try:
                     desc_list.append(i.select('.c6')[0].text.strip())  # These are the classes (so far) that are variable from page to page
                 except:
@@ -50,18 +50,19 @@ def get_menu(url):
                     price_list.append(i.select('.b8')[1].text.strip())  # These are the classes (so far) that are variable from page to page
                 except:
                     price_list.append(np.NaN)
+                """
                 try:
                     picr = requests.get(splash, headers=hdr, timeout=30)
                     pic = BeautifulSoup(picr.text, "html.parser")
                     pic_list.append(pic.select('.af.d2 img')[0].attrs['src'])
                 except:
                     pic_list.append(np.NaN)
-
+                """
         data = {'Category': cat_list,
                 'Menu_Item': dish_list,
                 'Description': desc_list,
-                'Price': price_list,
-                'Pic_URL': pic_list}
+                'Price': price_list}
+#                'Pic_URL': pic_list}
         df = pd.DataFrame(data)
 
         print(timeit.default_timer() - start_time)
