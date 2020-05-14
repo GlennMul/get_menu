@@ -52,7 +52,7 @@ def get_menu(url):
                 subsect.append(category)
                 title.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['title'])
                 description.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['description'])
-                price.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['price'])
+                price.append("{:.2f}".format((stores[uuid]['data']['sectionEntitiesMap'][section][item]['price'])/100))
                 imageUrl.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['imageUrl'])
 
         data = {'Category': subsect,
