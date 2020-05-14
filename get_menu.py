@@ -1,7 +1,7 @@
-import numpy as np
+import json
+import timeit
 import pandas as pd
 import requests
-import timeit
 from bs4 import BeautifulSoup
 
 
@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 def get_menu(url):
     start_time = timeit.default_timer()
     try:
-        main_url = 'https://www.ubereats.com'
         hdr = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -18,52 +17,52 @@ def get_menu(url):
             'Accept-Language': 'en-US,en;q=0.8',
             'Connection': 'keep-alive'}
 
-        r = requests.get(url, headers=hdr, timeout=30)
+
+        r = requests.get(url, headers=hdr)
+
         doc = BeautifulSoup(r.text, "html.parser")
 
-        cat_list = []
-        dish_list = []
-        desc_list = []
-        price_list = []
-#        pic_list = []
+        redux_state = doc.find("script", {"id": "__REDUX_STATE__"})
 
-        category = doc.select('li')
+        contents = str(redux_state.contents[0])
 
-        for item in category:
-            try:
-                cat_name = item.select('h2')[0].text
-            except:
-                cat_name = cat_name
+        utf_s = contents.replace(r'\u0022', '"')
 
-            card = item.select('ul li')
+        json_data = json.loads(utf_s)
 
-            # the 'try' and 'except' are here as not all fields are on all menu cards
-            for i in card:
-                cat_list.append(cat_name)
-                dish_list.append(i.select('h4')[0].text.strip())
-#                splash = main_url + i.select('a')[0].attrs['href'].strip()
-                try:
-                    desc_list.append(i.select('.c6')[0].text.strip())  # These are the classes (so far) that are variable from page to page
-                except:
-                    desc_list.append(np.NaN)
-                try:
-                    price_list.append(i.select('.b8')[1].text.strip())  # These are the classes (so far) that are variable from page to page
-                except:
-                    price_list.append(np.NaN)
-                """
-                try:
-                    picr = requests.get(splash, headers=hdr, timeout=30)
-                    pic = BeautifulSoup(picr.text, "html.parser")
-                    pic_list.append(pic.select('.af.d2 img')[0].attrs['src'])
-                except:
-                    pic_list.append(np.NaN)
-                """
-        data = {'Category': cat_list,
-                'Menu_Item': dish_list,
-                'Description': desc_list,
-                'Price': price_list}
-#                'Pic_URL': pic_list}
+        stores = json_data['stores']
+
+        uuid = next(iter(stores.keys()))  # this assumes there is only one key in this dict BAD JUUJUU
+
+        section = next(iter(stores[uuid]['data']['sectionEntitiesMap'].keys()))
+
+        subsect = []
+        title = []
+        description = []
+        price = []
+        imageUrl = []
+
+        subs = stores[uuid]['data']['sections'][0]['subsectionUuids']
+
+        for sub in subs:
+            category = stores[uuid]['data']['subsectionsMap'][sub]['title']
+            items = stores[uuid]['data']['subsectionsMap'][sub]['itemUuids']
+
+            for item in items:
+                subsect.append(category)
+                title.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['title'])
+                description.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['description'])
+                price.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['price'])
+                imageUrl.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['imageUrl'])
+
+        data = {'Category': subsect,
+                'Menu_Item': title,
+                'Description': description,
+                'Price': price,
+                'Image_URL': imageUrl
+                }
         df = pd.DataFrame(data)
+
 
         print(timeit.default_timer() - start_time)
         return df
