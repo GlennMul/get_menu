@@ -1,17 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from get_menu import get_menu
 import pandas as pd
 
-
 app = Flask(__name__)
-
-"""
-df = pd.DataFrame({'A': [0, 1, 2, 3, 4],
-                   'B': [5, 6, 7, 8, 9],
-                   'C': ['a', 'b', 'c--', 'd', 'e']})
-"""
-
-# df = get_menu("https://www.ubereats.com/au/melbourne/food-delivery/ez-thai-cafe/osnrZYXYTbe6HFMa_JU-7g/27ced650-2a4b-4371-b22c-2bf9335b771a")
 
 
 @app.route("/")
@@ -24,3 +15,13 @@ def test():
         df = pd.DataFrame([])
 
     return render_template("index.html", url=url, tables=[df.to_html(classes='u-full-width', index=False)])
+
+
+@app.route('/csv/')
+def download_csv():
+    url = "https://www.ubereats.com/au/melbourne/food-delivery/leonards-house-of-love/wB5LCl7BSNugoFXljJbKOQ"
+    df = get_menu(url)
+    resp = make_response(df.to_csv(index=False))
+    resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    resp.headers["Content-Type"] = "text/csv"
+    return resp

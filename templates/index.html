@@ -12,8 +12,12 @@
     </form>
 
     {% if url != None: %}
-    <h5><strong>Retrieving menu from:</strong></h5>
+    <h5><strong>Menu from:</strong></h5>
     <h5>{{url}}</h5>
+    <form action="./csv">
+        <input type="submit" value="Download .csv" />
+    </form>
+
     {% endif %}
 
 

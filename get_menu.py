@@ -3,6 +3,7 @@ import timeit
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from flask import Response
 
 
 # noinspection PyBroadException
@@ -16,7 +17,6 @@ def get_menu(url):
             'Accept-Encoding': 'none',
             'Accept-Language': 'en-US,en;q=0.8',
             'Connection': 'keep-alive'}
-
 
         r = requests.get(url, headers=hdr)
 
@@ -52,7 +52,8 @@ def get_menu(url):
                 subsect.append(category)
                 title.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['title'])
                 description.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['description'])
-                price.append("{:.2f}".format((stores[uuid]['data']['sectionEntitiesMap'][section][item]['price'])/100))
+                price.append(
+                    "{:.2f}".format((stores[uuid]['data']['sectionEntitiesMap'][section][item]['price']) / 100))
                 imageUrl.append(stores[uuid]['data']['sectionEntitiesMap'][section][item]['imageUrl'])
 
         data = {'Category': subsect,
@@ -63,10 +64,15 @@ def get_menu(url):
                 }
         df = pd.DataFrame(data)
 
-
         print(timeit.default_timer() - start_time)
+
+        # resp = make_response(df.to_csv())
+        # resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
+        # resp.headers["Content-Type"] = "text/csv"
+
         return df
+
     except:
-        df = pd.DataFrame({"Invalid URL":[]})
+        df = pd.DataFrame({"Invalid URL": []})
         print(timeit.default_timer() - start_time)
         return df
