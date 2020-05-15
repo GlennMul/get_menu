@@ -13,19 +13,19 @@ def index():
     args = request.args
     url = args.get("url")
     if url is not None:
-        df = get_menu(url)
+        menu = get_menu(url)
 
     else:
-        df = '{}'
+        menu = '{}'
 
-    return render_template("index.html", url=url, tables=[pd.read_json(df).to_html(classes='u-full-width', index=False)])
+    return render_template("index.html", url=url, tables=[pd.read_json(menu).to_html(classes='u-full-width', index=False)])
 
 
 @app.route('/csv/<path:url>')
 def download_csv(url):
-    df = get_menu(url)
-    df = pd.read_json(df)
-    resp = make_response(df.to_csv(index=False))
+    menu = get_menu(url)
+    menu = pd.read_json(menu)
+    resp = make_response(menu.to_csv(index=False))
     resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
     resp.headers["Content-Type"] = "text/csv"
     return resp
