@@ -3,7 +3,7 @@ import timeit
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from flask import Response
+
 
 
 # noinspection PyBroadException
@@ -62,13 +62,13 @@ def get_menu(url):
                 'Price': price,
                 'Image_URL': imageUrl
                 }
-        df = pd.DataFrame(data)
+        df = pd.DataFrame(data).to_json()
 
         print(timeit.default_timer() - start_time)
 
         return df
 
     except:
-        df = pd.DataFrame({"Invalid URL": []})
+        df = '{"Invalid URL":{}}'
         print(timeit.default_timer() - start_time)
         return df
