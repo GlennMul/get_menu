@@ -14,18 +14,16 @@ def index():
     url = args.get("url")
     if url is not None:
         df = get_menu(url)
-        session["data"] = df.to_json()
+
     else:
         df = pd.DataFrame([])
-        session["data"] = df.to_json()
 
     return render_template("index.html", url=url, tables=[df.to_html(classes='u-full-width', index=False)])
 
 
-@app.route('/csv/')
-def download_csv():
-    df = session.get('data')
-    df = pd.read_json(df)
+@app.route('/csv/<path:url>')
+def download_csv(url):
+    df = get_menu(url)
     resp = make_response(df.to_csv(index=False))
     resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
     resp.headers["Content-Type"] = "text/csv"
