@@ -66,10 +66,6 @@ def get_menu(url):
 
         print(timeit.default_timer() - start_time)
 
-        # resp = make_response(df.to_csv())
-        # resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
-        # resp.headers["Content-Type"] = "text/csv"
-
         return df
 
     except:
