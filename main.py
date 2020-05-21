@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, session
+from flask import Flask, render_template, request, make_response, session, jsonify
 from get_menu import get_menu
 import pandas as pd
 import os
@@ -18,7 +18,8 @@ def index():
     else:
         menu = '{}'
 
-    return render_template("index.html", url=url, tables=[pd.read_json(menu).to_html(classes='u-full-width', index=False)])
+    return render_template("index.html", menu=menu, url=url,
+                           tables=[pd.read_json(menu).to_html(classes='u-full-width', index=False)])
 
 
 @app.route('/csv/<path:url>')
@@ -29,3 +30,8 @@ def download_csv(url):
     resp.headers["Content-Disposition"] = "attachment; filename=export.csv"
     resp.headers["Content-Type"] = "text/csv"
     return resp
+
+@app.route('/upload/', methods = ["GET", "POST"])
+def upload():
+
+    return 200

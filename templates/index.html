@@ -7,17 +7,30 @@
         <label for="url">Enter Uber Eats url:</label>
         <input class="u-full-width" type="text" name="url" id="url" value="{% if url != None: %}{{url}}{% endif %}">
         <br/>
-        <input type="submit" value="Get Menu" >
+        <input class="button-primary" type="submit" value="Get Menu" >
 
     </form>
 
     {% if url != None: %}
+
     <h5><strong>Menu from:</strong></h5>
     <h6>{{url}}</h6>
+    <div class ="row">
+    <div class ="four columns">
     <form action="./csv/{{url}}">
-        <input type="submit" value="Download .csv" />
+        <input class="button-primary" type="submit" value="Download .csv" />
+    </form>
+    </div>
+    <form>
+      <input class="button-primary" type="button" value="Upload To Server" onclick="myFunc(jsmenu)">
     </form>
 
+    <script type="text/javascript">
+        jsmenu = JSON.parse({{menu|tojson}})
+    </script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
+    </div>
     {% endif %}
 
 
