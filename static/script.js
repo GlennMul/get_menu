@@ -1,10 +1,14 @@
 function myFunc(menu) {
     setTimeout(() => {
-    for (var i = 0; i < menu.Category.length; i++) {
-    const item = menu.Category[i] +' : '+ menu.Menu_Item[i]  +' : '+ menu.Description[i] +' : '+ menu.Price[i] +' : '+ menu.Image_URL[i] ;
-    console.log(item);
-    console.log(i);
-    }
+    fetch('/upload/', {
+        method: 'POST',
+        body: JSON.stringify(menu)
+    }).then(function(response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('POST response: ');
+        console.log(text);
+    });
     }, 2000);
-    return 200
+    console.log('Sending request...')
 }

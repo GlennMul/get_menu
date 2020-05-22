@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, make_response, session, jsonify
 from get_menu import get_menu
+from upload import upload_menu
 import pandas as pd
 import os
 import time
@@ -37,8 +38,7 @@ def download_csv(url):
 def upload():
     if request.method == 'POST':
         menu = request.get_json("jsmenu")
-        df = pd.DataFrame(menu)
-        print(df)
+        upload_menu(menu)
         return 'OK', 200
     else:
         message = {'Get': 'request'}
