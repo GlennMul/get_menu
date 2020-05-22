@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, make_response, session, jsoni
 from get_menu import get_menu
 import pandas as pd
 import os
+import time
 
 app = Flask(__name__)
 app.secret_key = os.urandom(28)
@@ -31,7 +32,13 @@ def download_csv(url):
     resp.headers["Content-Type"] = "text/csv"
     return resp
 
-@app.route('/upload/', methods = ["GET", "POST"])
-def upload():
 
-    return 200
+@app.route('/upload/', methods=["GET", "POST"])
+def upload():
+    if request.method == 'POST':
+        menu = request.get_json("jsmenu")
+        print(menu)
+        return 'OK', 200
+    else:
+        message = {'Get': 'request'}
+        return jsonify(message)

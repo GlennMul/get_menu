@@ -22,11 +22,25 @@
     </form>
     </div>
     <form>
-      <input class="button-primary" type="button" value="Upload To Server" onclick="myFunc(jsmenu)">
+        <input class="button-primary" type="button" value="Upload To Server" onclick="myFunc(jsmenu)">
     </form>
 
     <script type="text/javascript">
         jsmenu = JSON.parse({{menu|tojson}})
+
+        setTimeout(() => {
+        fetch('/upload/', {
+            method: 'POST',
+            body: JSON.stringify(jsmenu)
+        }).then(function(response) {
+            return response.text();
+        }).then(function (text) {
+            console.log('POST response: ');
+            console.log(text);
+        });
+        }, 2000);
+        console.log('First thing')
+
     </script>
 
     <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
