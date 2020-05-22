@@ -1,7 +1,10 @@
-import pandas as pd
+import json
+import time
 
 
 def upload_menu(menu):
-    df = pd.DataFrame(menu)
-    print(df)
-    return df
+    data = menu
+    for i in range(len(data['Category'])):
+        print(data['Category'][i], ":", data['Menu_Item'][i], ":", data['Description'][i], ":", data['Price'][i], ":", data['Image_URL'][i])
+        time.sleep(1)
+    return menu
