@@ -9,6 +9,6 @@ function myFunc(menu) {
         console.log('POST response: ');
         console.log(text);
     });
-    }, 1000);
+    }, 2000);
     console.log('Sending request...')
 }
