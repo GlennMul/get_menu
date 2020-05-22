@@ -37,7 +37,8 @@ def download_csv(url):
 def upload():
     if request.method == 'POST':
         menu = request.get_json("jsmenu")
-        print(menu)
+        df = pd.DataFrame(menu)
+        print(df)
         return 'OK', 200
     else:
         message = {'Get': 'request'}
