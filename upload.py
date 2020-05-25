@@ -2,9 +2,8 @@ import json
 import time
 
 
-def upload_menu(menu):
+def upload_menu(menu, num):
     data = menu
-    for i in range(len(data['Category'])):
-        print(data['Category'][i], ":", data['Menu_Item'][i], ":", data['Description'][i], ":", data['Price'][i], ":", data['Image_URL'][i])
-        time.sleep(1)
+    print(data['Category'][num], ":", data['Menu_Item'][num], ":", data['Description'][num], ":", data['Price'][num], ":", data['Image_URL'][num])
+    time.sleep(1)
     return menu

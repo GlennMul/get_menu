@@ -22,13 +22,13 @@
     </form>
     </div>
     <form>
-        <input class="button-primary" type="button" value="Upload To Server" onclick="myFunc(jsmenu)">
+        <input class="button-primary" type="button" value="Upload To Server" onclick="myFunc1(jsmenu,num,tot)">
     </form>
 
     <script type="text/javascript">
         jsmenu = JSON.parse({{menu|tojson}})
-
-
+        tot = jsmenu.Category.length
+        num = 0
 
     </script>
 

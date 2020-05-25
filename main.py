@@ -37,8 +37,9 @@ def download_csv(url):
 @app.route('/upload/', methods=["GET", "POST"])
 def upload():
     if request.method == 'POST':
-        menu = request.get_json("jsmenu")
-        upload_menu(menu)
+        menu = request.json
+        num = 0
+        upload_menu(menu, num)
         return 'OK', 200
     else:
         message = {'Get': 'request'}
