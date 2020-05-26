@@ -3,6 +3,7 @@ from get_menu import get_menu
 from upload import upload_menu
 import pandas as pd
 import os
+import json
 import time
 
 app = Flask(__name__)
@@ -37,10 +38,12 @@ def download_csv(url):
 @app.route('/upload/', methods=["GET", "POST"])
 def upload():
     if request.method == 'POST':
-        menu = request.json
-        num = 0
+        menu = json.loads(request.json['menu'])
+        num = request.json['num']
+        print(num)
         upload_menu(menu, num)
-        return 'OK', 200
+        time.sleep(2)
+        return json.dumps({'status': 'OK'})
     else:
         message = {'Get': 'request'}
         return jsonify(message)
