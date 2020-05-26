@@ -40,9 +40,8 @@ def upload():
     if request.method == 'POST':
         menu = json.loads(request.json['menu'])
         num = request.json['num']
-        print(num)
         upload_menu(menu, num)
-        time.sleep(2)
+        time.sleep(1)
         return json.dumps({'status': 'OK'})
     else:
         message = {'Get': 'request'}
